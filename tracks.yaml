@@ -1,3 +1,4 @@
+release_repo_url: git@github.com:rockos-riscv-ros/gz_ogre_next_vendor-release
 tracks:
   jazzy:
     actions:
