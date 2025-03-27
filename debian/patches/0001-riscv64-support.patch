@@ -1,0 +1,62 @@
+From e3dedf2f4482553e307d9dbcd9fa7484824c3433 Mon Sep 17 00:00:00 2001
+From: Zheng Junjie <zhengjunjie@iscas.ac.cn>
+Date: Tue, 18 Jun 2024 11:00:39 +0800
+Subject: [PATCH] riscv64 support.
+
+---
+ CMakeLists.txt                             |  3 ++-
+ patches/riscv64-ppc64-64bits-support.patch | 21 +++++++++++++++++++++
+ 2 files changed, 23 insertions(+), 1 deletion(-)
+ create mode 100644 patches/riscv64-ppc64-64bits-support.patch
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a904707..dc0400f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,7 +5,7 @@ find_package(ament_cmake REQUIRED)
+ find_package(ament_cmake_vendor_package REQUIRED)
+ 
+ set(EXTRA_CMAKE_FLAGS)
+-if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*|arm.*|ARM.*)")
++if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*|arm.*|ARM.*|riscv64.*)")
+   # Flags for non SIMD architectures
+   # https://github.com/gazebo-forks/ogre-2.3-release/blob/960bb19664879282b979e4ed8cb3ce278c875bdb/debian/rules#L21-L28
+   set(EXTRA_CMAKE_FLAGS -DOGRE_SIMD_NEON:BOOL=FALSE  -DOGRE_SIMD_SSE2:BOOL=FALSE)
+@@ -35,6 +35,7 @@ ament_vendor(${PROJECT_NAME}
+   GLOBAL_HOOK
+   PATCHES
+     patches/0001-Fix-incomplete-vulkan-linkage.patch
++    patches/riscv64-ppc64-64bits-support.patch
+ )
+ 
+ if(BUILD_TESTING)
+diff --git a/patches/riscv64-ppc64-64bits-support.patch b/patches/riscv64-ppc64-64bits-support.patch
+new file mode 100644
+index 0000000..d00b84e
+--- /dev/null
++++ b/patches/riscv64-ppc64-64bits-support.patch
+@@ -0,0 +1,21 @@
++Description: Include riscv64 support and ppc64el support
++Author: Jose Luis Rivero <jrivero@osrfoundation.org>
++Forwarded: no
++Last-Update: 2024-02-10
++---
++--- a/OgreMain/include/OgrePlatform.h
+++++ b/OgreMain/include/OgrePlatform.h
++@@ -76,10 +76,11 @@
++ 
++ /* Find the arch type */
++ #if defined(__x86_64__) || defined(_M_X64) || defined(_M_X64) || defined(_M_AMD64) \
++- || defined(__ppc64__) \
+++ || defined(__ppc64__) || defined(__PPC64__) \
++  || defined(__arm64__) || defined(__aarch64__) || defined(_M_ARM64) \
++  || defined(__mips64) || defined(__mips64_) \
++- || defined(__alpha__) || defined(__ia64__) || defined(__e2k__) || defined(__s390__) || defined(__s390x__)
+++ || defined(__alpha__) || defined(__ia64__) || defined(__e2k__) || defined(__s390__) || defined(__s390x__) \
+++ || (defined(__riscv) && (__riscv_xlen == 64))
++ #   define OGRE_ARCH_TYPE OGRE_ARCHITECTURE_64
++ #else
++ #   define OGRE_ARCH_TYPE OGRE_ARCHITECTURE_32
+-- 
+2.41.0
+
