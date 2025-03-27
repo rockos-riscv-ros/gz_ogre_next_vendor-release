@@ -1,4 +1,4 @@
-From 9643454952f73081bf3b5608cc67362793acb443 Mon Sep 17 00:00:00 2001
+From ea0640f3886b51164dbc2dccb8891a5b70b3eee8 Mon Sep 17 00:00:00 2001
 From: Zheng Junjie <z572@z572.online>
 Date: Thu, 27 Mar 2025 10:04:53 +0800
 Subject: [PATCH] add riscv64 support.
